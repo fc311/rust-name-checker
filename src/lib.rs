@@ -1,19 +1,15 @@
 pub fn validate_name(name: &str) -> Result<Option<&str>, &'static str> {
+    #[allow(non_snake_case)]
     let MAX_NAME_LENGTH: usize = 30;
 
-    if name.is_empty() {
-        return Ok(None);
+    match name {
+        "" => Ok(None),
+        n if n.len() > MAX_NAME_LENGTH => Err("Name is too long"),
+        n if !n.chars().all(|c| c.is_alphabetic() || c.is_whitespace()) => {
+            Err("Name contains invalid characters")
+        }
+        n => Ok(Some(n)),
     }
-
-    if name.len() > MAX_NAME_LENGTH {
-        return Err("Name is too long");
-    }
-
-    if !name.chars().all(|c| c.is_alphabetic() || c.is_whitespace()) {
-        return Err("Name contains invalid characters");
-    }
-
-    Ok(Some(name))
 }
 
 #[cfg(test)]
